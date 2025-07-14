@@ -5,6 +5,9 @@ from html import escape
 import time
 import re
 from datetime import datetime
+from colorama import init, Fore, Back, Style
+import textwrap
+
 
 MEDUZA_BASE = 'https://meduza.io'
 MEDUZA_RSS = f'{MEDUZA_BASE}/rss/all'
@@ -104,3 +107,34 @@ def get_latest_news():
     except Exception as e:
         print(f"Критическая ошибка: {str(e)}")
         return None
+
+
+
+def print_news_to_console(news_items):
+    init(autoreset=True)
+    
+    if not news_items:
+        print(Fore.RED + "Не удалось получить новости")
+        return
+    
+    for i, item in enumerate(news_items, 1):
+        print("\n" + Back.BLUE + Fore.WHITE + f" НОВОСТЬ {i} ".center(80, '=') + Style.RESET_ALL)
+        
+        print(Fore.YELLOW + Style.BRIGHT + "\nЗаголовок:" + Style.RESET_ALL)
+        print(Fore.CYAN + Style.BRIGHT + textwrap.fill(item['title'], width=80) + Style.RESET_ALL)
+        
+        print(Fore.YELLOW + "\nДата:" + Style.RESET_ALL)
+        print(Fore.WHITE + item['pub_date'] + Style.RESET_ALL)
+        
+        print(Fore.YELLOW + "\nТекст:" + Style.RESET_ALL)
+        cleaned_text = clean_html(item['description'])
+        print(Fore.WHITE + textwrap.fill(cleaned_text, width=80) + Style.RESET_ALL)
+        
+        print(Fore.YELLOW + "\nСсылка:" + Style.RESET_ALL)
+        print(Fore.BLUE + Style.BRIGHT + item['url'] + Style.RESET_ALL)
+        
+        print("\n" + Fore.LIGHTBLACK_EX + "=" * 80 + Style.RESET_ALL)
+
+if __name__ == "__main__":
+    news = get_latest_news()
+    print_news_to_console(news)
