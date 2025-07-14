@@ -65,6 +65,7 @@ MAX_NEWS = 10  # Maximum news items to fetch
     Color-coded using Colorama
     Properly wrapped text (80 chars width)
     Cleaned HTML tags
+
 2)HTML Format (via format_news_item):
   Preserves basic HTML tags (bold, italic, links)
   Escapes special characters
